@@ -13,6 +13,9 @@ import (
 
 func main() {
 	cfg := config.Load()
+	if cfg.JWTSecret == "" {
+		log.Fatal("JWT_SECRET é obrigatório para autenticação")
+	}
 
 	db, err := database.Connect(cfg.DatabaseDSN())
 	if err != nil {
@@ -24,7 +27,7 @@ func main() {
 
 	r := gin.Default()
 	middlewares.Setup(r)
-	handlers.RegisterRoutes(r, db)
+	handlers.RegisterRoutes(r, db, cfg)
 
 	addr := ":" + cfg.HTTPPort
 	log.Printf("API escutando em %s", addr)

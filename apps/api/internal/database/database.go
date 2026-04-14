@@ -5,6 +5,8 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"simon/apps/api/internal/models"
 )
 
 func Connect(dsn string) (*gorm.DB, error) {
@@ -22,6 +24,9 @@ func Init(db *gorm.DB) error {
 	}
 	if err := sqlDB.Ping(); err != nil {
 		return fmt.Errorf("ping no banco: %w", err)
+	}
+	if err := db.AutoMigrate(&models.User{}, &models.Collection{}, &models.Request{}); err != nil {
+		return fmt.Errorf("migrar schema: %w", err)
 	}
 	return nil
 }
