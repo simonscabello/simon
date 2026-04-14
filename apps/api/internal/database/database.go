@@ -25,7 +25,15 @@ func Init(db *gorm.DB) error {
 	if err := sqlDB.Ping(); err != nil {
 		return fmt.Errorf("ping no banco: %w", err)
 	}
-	if err := db.AutoMigrate(&models.User{}, &models.Collection{}, &models.Request{}); err != nil {
+	if err := db.AutoMigrate(
+		&models.User{},
+		&models.Collection{},
+		&models.Request{},
+		&models.RequestHeader{},
+		&models.RequestQueryParam{},
+		&models.Environment{},
+		&models.EnvironmentVariable{},
+	); err != nil {
 		return fmt.Errorf("migrar schema: %w", err)
 	}
 	return nil
