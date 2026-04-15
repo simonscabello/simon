@@ -17,6 +17,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB, cfg *config.Config) {
 	querySvc := services.NewRequestQueryParamService(db)
 	envSvc := services.NewEnvironmentService(db)
 	envVarSvc := services.NewEnvironmentVariableService(db)
+	previewSvc := services.NewRequestPreviewService(db)
 
 	r.GET("/health", Health(db))
 
@@ -37,6 +38,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB, cfg *config.Config) {
 
 		protected.POST("/collections/:id/requests", CreateRequest(reqSvc))
 		protected.GET("/collections/:id/requests", ListRequests(reqSvc))
+		protected.GET("/requests/:id/preview", PreviewRequest(previewSvc))
 		protected.PUT("/requests/:id", UpdateRequest(reqSvc))
 		protected.DELETE("/requests/:id", DeleteRequest(reqSvc))
 
